@@ -16,18 +16,21 @@ export default async function handler(req, res) {
     }
 
     const c = order.customer || {};
+    const area = order.area || order.areaName || order.areaId || 'Not specified';
+    const paymentMethod = String(order.paymentMethod || 'cod').trim().toLowerCase();
+    const paymentLabel = paymentMethod === 'instapay' ? 'InstaPay' : 'Cash on delivery';
     const lines = (order.lines || []).map(l => `• ${l.qty}x ${l.name} - EGP ${l.total}`).join('\n');
-    
+
     const msg = `🛍️ *New Order!* (${order.number})\n\n` +
       `*Items:*\n${lines}\n\n` +
       `*Items Total:* EGP ${order.itemsTotal}\n` +
       `*Delivery:* EGP ${order.delivery}\n` +
-      `*Total:* EGP ${order.total} (COD)\n\n` +
+      `*Total:* EGP ${order.total} (${paymentLabel})\n\n` +
       `*Customer Details:*\n` +
       `👤 *Name:* ${c.first || ''} ${c.last || ''}\n` +
       `📞 *Phone:* ${c.phone || ''}\n` +
       `💬 *WhatsApp:* ${c.whatsapp || ''}\n` +
-      `📍 *Area:* ${order.area === 'alex' ? 'Alexandria' : 'Cairo & Giza'}\n` +
+      `📍 *Area:* ${area}\n` +
       `🏠 *Address:* ${c.address || ''}`;
 
     const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
