@@ -75,16 +75,16 @@ export default async function handler(req, res) {
     const area = escapeMarkdown(order.area || order.areaName || order.areaId || "Not specified");
     const paymentMethod = String(order.paymentMethod || "cod").trim().toLowerCase();
     const paymentLabel = paymentMethod === "instapay" ? "InstaPay" : "Cash on delivery";
-    const msg = `🛍️ *New Order!* (${escapeMarkdown(order.number)})\\n\\n` +
-      `*Items:*\\n${lines.join("\\n")}\\n\\n` +
-      `*Items Total:* EGP ${Number(order.itemsTotal).toFixed(2)}\\n` +
-      `*Delivery:* EGP ${Number(order.delivery).toFixed(2)}\\n` +
-      `*Total:* EGP ${Number(order.total).toFixed(2)} (${paymentLabel})\\n\\n` +
-      `*Customer Details:*\\n` +
-      `👤 *Name:* ${escapeMarkdown(c.first)} ${escapeMarkdown(c.last)}\\n` +
-      `📞 *Phone:* ${escapeMarkdown(c.phone)}\\n` +
-      `💬 *WhatsApp:* ${escapeMarkdown(c.whatsapp || c.phone)}\\n` +
-      `📍 *Area:* ${area}\\n` +
+    const msg = `🛍️ *New Order!* (${escapeMarkdown(order.number)})\n\n` +
+      `*Items:*\n${lines.join("\n")}\n\n` +
+      `*Items Total:* EGP ${Number(order.itemsTotal).toFixed(2)}\n` +
+      `*Delivery:* EGP ${Number(order.delivery).toFixed(2)}\n` +
+      `*Total:* EGP ${Number(order.total).toFixed(2)} (${paymentLabel})\n\n` +
+      `*Customer Details:*\n` +
+      `👤 *Name:* ${escapeMarkdown(c.first)} ${escapeMarkdown(c.last)}\n` +
+      `📞 *Phone:* ${escapeMarkdown(c.phone)}\n` +
+      `💬 *WhatsApp:* ${escapeMarkdown(c.whatsapp || c.phone)}\n` +
+      `📍 *Area:* ${area}\n` +
       `🏠 *Address:* ${escapeMarkdown(c.address)}`;
 
     const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
